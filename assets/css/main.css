@@ -1,0 +1,45 @@
+body {
+	font-family: sans-serif;
+	background-color: #2b2a33;
+	color: #fbfbfe;
+}
+
+main {
+	max-width: 90%;
+	margin: 2rem auto;
+}
+
+#currency-rate {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+}
+
+#currency-rate section {
+	margin: 1em;
+	padding: 1em;
+	border-radius: 6px;
+	box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+	background-color: #42414d;
+	text-align: center;
+}
+
+#currency-rate section h1 span:first-of-type {
+	font-size: 0.6em;
+	vertical-align: super;
+}
+
+#currency-rate section > header {
+	font-size: 1.7em;
+	padding: 0.3em;
+	padding-left: 0;
+}
+
+.flag {
+	width: 0.9em;
+}
+
+@media only screen and (min-width: 1024px) {
+	main {
+		max-width: 75.25rem;
+	}
+}
