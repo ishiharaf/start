@@ -3,25 +3,34 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="assets/css/main.css">
+	<script src="assets/js/main.js"></script>
 	<title>Home</title>
 </head>
 <body>
 	<main>
+		<article id="currency-rate">
+			<section>
+				<header><img class="flag" src="assets/img/eur.svg" alt="Europe Flag"> EUR</header>
+				<h1><span id="eur-change"></span> € <span id="eur-price">0</span></h1>
+			</section>
+			<section>
+				<header><img class="flag" src="assets/img/gbp.svg" alt="Great Britain Flag"> GBP</header>
+				<h1><span id="gbp-change"></span> £ <span id="gbp-price">0</span></h1>
+			</section>
+			<section>
+				<header><img class="flag" src="assets/img/jpy.svg" alt="Japanese Flag"> JPY</header>
+				<h1><span id="jpy-change"></span> ¥ <span id="jpy-price">0</span></h1>
+			</section>
+			<section>
+				<header><img class="flag" src="assets/img/brl.svg" alt="Brazilian Flag"> BRL</header>
+				<h1><span id="brl-change"></span> R$ <span id="brl-price">0</span></h1>
+			</section>
+			<section>
+				<header><img class="flag" src="assets/img/cny.svg" alt="Great Britain Flag"> CNY</header>
+				<h1><span id="cny-change"></span> ¥ <span id="cny-price">0</span></h1>
+			</section>
+		</article>
 	</main>
 </body>
-<style></style>
-<script>
-	const test = async () => {
-		const url = "https://wise.com/rates/live?source=USD&target=JPY"
-		let response = await fetch(url, {mode: "cors"});
-
-		if (response.ok) { // if HTTP-status is 200-299
-		// get the response body (the method explained below)
-		let json = await response.json();
-		return json
-		} else {
-		alert("HTTP-Error: " + response.status);
-		}
-	}
-</script>
 </html>
