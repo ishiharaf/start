@@ -13,7 +13,7 @@
 <script>
 	const test = async () => {
 		const url = "https://wise.com/rates/live?source=USD&target=JPY"
-		let response = await fetch(url);
+		let response = await fetch(url, {mode: "cors"});
 
 		if (response.ok) { // if HTTP-status is 200-299
 		// get the response body (the method explained below)
