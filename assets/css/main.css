@@ -5,9 +5,17 @@ body {
 	color: #fbfbfe;
 }
 
+a {
+	text-decoration: none;
+	color: #fbfbfe;
+}
+
 main {
 	max-width: 90%;
 	margin: 2rem auto;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
 }
 
 .card {
@@ -17,6 +25,43 @@ main {
 	box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
 	background-color: #42414d;
 	text-align: center;
+}
+
+.card:hover {
+	background-color: #55555C;
+}
+
+/* Profile */
+#user-info {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.avatar {
+	align-self: center;
+	margin-bottom: 1em;
+	width: 10rem;
+	height: 10rem;
+	overflow: hidden;
+	border-radius: 50%;
+	border-color: 0.1rem solid #0a0908;
+	box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+}
+
+.icon-wrapper {
+	width: 2em;
+	padding: 0.5em;
+	border-radius: 6px;
+	box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+}
+
+.icon-wrapper:hover {
+	background-color: #55555C;
+}
+
+.icon {
+	width: 2em;
 }
 
 /* Currency */

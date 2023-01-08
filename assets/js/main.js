@@ -84,7 +84,7 @@ const updateWeather = async () => {
 		<section id="current-forecast" class="card">
 			<header>
 				<h3>${weatherCode[data.current_weather.weathercode]}</h3>
-				<img src="assets/img/${weatherIcon[data.current_weather.weathercode]}.svg" alt="Weather Icon">
+				<img src="assets/img/weather/${weatherIcon[data.current_weather.weathercode]}.svg" alt="Weather Icon">
 				<h2>${data.current_weather.temperature}°</h2>
 			</header>
 			<h3>${data.daily.temperature_2m_max[0]}°</h3>
@@ -95,16 +95,14 @@ const updateWeather = async () => {
 		document.querySelector("#weather-forecast").innerHTML += `
 			<section class="card">
 				<header>
-					<h3>${data.daily.time[i].replaceAll("-", "/")}</h3>
-					<img src="assets/img/${weatherIcon[data.daily.weathercode[i]]}.svg" alt="Weather Icon">
+					<h3>${data.daily.time[i].substring(5, 10).replaceAll("-", "/")}</h3>
+					<img src="assets/img/weather/${weatherIcon[data.daily.weathercode[i]]}.svg" alt="Weather Icon">
 				</header>
 				<h3>${data.daily.temperature_2m_max[i]}°</h3>
 				<p>${data.daily.temperature_2m_min[i]}°</p>
 			</section>
 		`
 	}
-	// ${data.latitude}, ${data.longitude}
-	// data.current_weather.time.substring(0, 10).replaceAll("-", "/")}
 }
 
 window.addEventListener("load", () => {
