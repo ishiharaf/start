@@ -81,7 +81,7 @@ const updateWeather = async () => {
 	console.log(data)
 
 	document.querySelector("#weather-forecast").innerHTML = `
-		<section id="current-forecast">
+		<section id="current-forecast" class="card">
 			<header>
 				<h3>${weatherCode[data.current_weather.weathercode]}</h3>
 				<img src="assets/img/${weatherIcon[data.current_weather.weathercode]}.svg" alt="Weather Icon">
@@ -93,7 +93,7 @@ const updateWeather = async () => {
 	`
 	for (let i = 1; i < 7; i++) {
 		document.querySelector("#weather-forecast").innerHTML += `
-			<section>
+			<section class="card">
 				<header>
 					<h3>${data.daily.time[i].replaceAll("-", "/")}</h3>
 					<img src="assets/img/${weatherIcon[data.daily.weathercode[i]]}.svg" alt="Weather Icon">
