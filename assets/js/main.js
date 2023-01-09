@@ -17,24 +17,18 @@ const getPreviousDate = (date) => {
 	return new Date(currentDate - 864e5).toISOString().substring(0, 10)
 }
 
-const updateCurrency = async (base, target) => {
-	const data = await getCurrency(base, target)
-	if (!data.error) {
-		document.querySelector(`#${target}-price`).innerHTML = data[target].toFixed(3)
-		const previousData = await getCurrency(base, target, getPreviousDate(data.date))
-
-		if (previousData[target] > data[target]) {
-			document.querySelector(`#${target}-change`).innerHTML = "▼"
-			document.querySelector(`#${target}-change`).style.color = "#ff6341"
-		}
-		if (previousData[target] < data[target]) {
-			document.querySelector(`#${target}-change`).innerHTML = "▲"
-			document.querySelector(`#${target}-change`).style.color = "#3af277"
-		}
+const updateIndicator = (previous, current, target) => {
+	if (previous > current) {
+		document.querySelector(`#${target}-change`).innerHTML = "▼"
+		document.querySelector(`#${target}-change`).style.color = "#ff6341"
+	}
+	if (previous < current) {
+		document.querySelector(`#${target}-change`).innerHTML = "▲"
+		document.querySelector(`#${target}-change`).style.color = "#3af277"
 	}
 }
 
-const updateChart = async (base, target) => {
+const updateCurrency = async (base, target) => {
 	const data = await getCurrency(base, target)
 	const dates = [data.date]
 	const weeklyData = {}
@@ -45,7 +39,7 @@ const updateChart = async (base, target) => {
 	}
 
 	const points = []
-	const prices = Object.values(weeklyData)
+	const prices = Object.values(weeklyData).reverse()
 	const ordered = [...prices].sort((a, b) => a - b)
 	for (let i = 0; i < 7; i++) {
 		const index = ordered.indexOf(prices[i])
@@ -54,14 +48,15 @@ const updateChart = async (base, target) => {
 		points.push(`${width},${height}`)
 	}
 
-	const card = document.querySelector(`#${target}-card`)
-	card.style.backgroundImage = `url('data:image/svg+xml, <svg xmlns="http://www.w3.org/2000/svg" width="50" height="15" viewBox="0 0 300 100"><polyline fill="none" stroke="%230074d9" stroke-width="10" points="${points.join(" ")}"/></svg>')`
+	document.querySelector(`#${target}-price`).innerHTML = data[target].toFixed(3)
+	document.querySelector(`#${target}-card`).style.backgroundImage = `url('data:image/svg+xml, <svg xmlns="http://www.w3.org/2000/svg" width="50" height="15" viewBox="0 0 300 100"><polyline fill="none" stroke="%230074d9" stroke-width="10" points="${points.join(" ")}"/></svg>')`
+	updateIndicator(weeklyData[dates[1]], data[target], target)
 }
 
 window.addEventListener("load", () => {
-	updateCurrency("usd", "eur"), updateChart("usd", "eur")
-	updateCurrency("usd", "gbp"), updateChart("usd", "gbp")
-	updateCurrency("usd", "jpy"), updateChart("usd", "jpy")
-	updateCurrency("usd", "brl"), updateChart("usd", "brl")
-	updateCurrency("usd", "cny"), updateChart("usd", "cny")
+	updateCurrency("usd", "eur")
+	updateCurrency("usd", "gbp")
+	updateCurrency("usd", "jpy")
+	updateCurrency("usd", "brl")
+	updateCurrency("usd", "cny")
 })
