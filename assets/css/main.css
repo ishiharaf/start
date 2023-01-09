@@ -65,7 +65,7 @@ main {
 }
 
 /* Currency */
-#currency-rate, #weather-forecast {
+#currency-rate {
 	display: grid;
 }
 
@@ -85,33 +85,8 @@ main {
 
 .flag {
 	width: 0.9em;
-	margin-left: -0.5em;
-}
-
-/* Weather */
-#weather-forecast {
-	grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
-}
-
-#current-forecast {
-	grid-column: 1 / 3;
-	grid-row: 1 / 3;
-}
-
-#weather-forecast h3,
-#weather-forecast p {
-	margin: 0.4em;
-}
-
-#current-forecast img {
-	margin-bottom: -1.1em;
-	margin-right: -0.5em;
-}
-
-#current-forecast h2 {
-	display: inline-block;
-	font-size: 2.5em;
-	margin: 0 0 0.3em 0;
+	margin-left: -0.3em;
+	margin-bottom: 0.05em;
 }
 
 /* Desktop */

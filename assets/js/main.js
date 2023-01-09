@@ -44,7 +44,7 @@ const getPreviousDate = (date) => {
 const updateCurrency = async (base, target) => {
 	const data = await getCurrency(base, target)
 	if (!data.error) {
-		document.querySelector(`#${target}-price`).innerHTML = data[target]
+		document.querySelector(`#${target}-price`).innerHTML = data[target].toFixed(3)
 		const previousData = await getCurrency(base, target, getPreviousDate(data.date))
 
 		if (previousData[target] > data[target]) {
@@ -58,55 +58,7 @@ const updateCurrency = async (base, target) => {
 	}
 }
 
-const getWeather = async (latitude, longitude, timezone) => {
-	const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=${timezone}`
-	return fetchData(url)
-}
-
-const getPosition = () => {
-	if (!navigator.geolocation) {
-		return {coords: {latitude: 35.70, longitude: 139.69}}
-	} else {
-		return new Promise((res, rej) => {
-			navigator.geolocation.getCurrentPosition(res, rej)
-		})
-	}
-}
-
-const updateWeather = async () => {
-	const position = await getPosition()
-	const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
-	const data = await getWeather(position.coords.latitude, position.coords.longitude, timezone)
-	// const data = await getWeather(35.70, 139.69, timezone)
-	console.log(data)
-
-	document.querySelector("#weather-forecast").innerHTML = `
-		<section id="current-forecast" class="card">
-			<header>
-				<h3>${weatherCode[data.current_weather.weathercode]}</h3>
-				<img src="assets/img/weather/${weatherIcon[data.current_weather.weathercode]}.svg" alt="Weather Icon">
-				<h2>${data.current_weather.temperature}°</h2>
-			</header>
-			<h3>${data.daily.temperature_2m_max[0]}°</h3>
-			<p>${data.daily.temperature_2m_min[0]}°</p>
-		</section>
-	`
-	for (let i = 1; i < 7; i++) {
-		document.querySelector("#weather-forecast").innerHTML += `
-			<section class="card">
-				<header>
-					<h3>${data.daily.time[i].substring(5, 10).replaceAll("-", "/")}</h3>
-					<img src="assets/img/weather/${weatherIcon[data.daily.weathercode[i]]}.svg" alt="Weather Icon">
-				</header>
-				<h3>${data.daily.temperature_2m_max[i]}°</h3>
-				<p>${data.daily.temperature_2m_min[i]}°</p>
-			</section>
-		`
-	}
-}
-
 window.addEventListener("load", () => {
-	updateWeather()
 	updateCurrency("usd", "jpy")
 	updateCurrency("usd", "brl")
 	updateCurrency("usd", "eur")
