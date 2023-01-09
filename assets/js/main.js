@@ -8,7 +8,7 @@ const fetchData = async (url) => {
 }
 
 const getCurrency = async (base, target, date = "latest") => {
-	const url = `https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/${date}/currencies/${base}/${target}.json`
+	const url = `https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/${date}/currencies/${base}/${target}.min.json`
 	return fetchData(url)
 }
 
