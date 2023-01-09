@@ -89,6 +89,12 @@ main {
 	margin-bottom: 0.05em;
 }
 
+#currency-rate .card {
+	background-repeat: no-repeat;
+	background-position-y: center;
+	background-position-x: center;
+}
+
 /* Desktop */
 @media only screen and (min-width: 1024px) {
 	main {
