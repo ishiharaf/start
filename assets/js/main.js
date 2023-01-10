@@ -1,3 +1,15 @@
+function Chart() {
+	this.days = 7
+	this.strokeColor = "0074d9"
+	this.strokeWidth = 10
+	this.paddingX = 5
+	this.paddingY = 5
+	this.vWidth = 300
+	this.vHeight = 100
+	this.width = this.vWidth / (this.days - 1)
+	this.height = (this.vHeight - this.paddingY * 2) / (this.days - 1)
+}
+
 const fetchData = async (url) => {
 	const response = await fetch(url)
 	if (response.ok) {
@@ -26,28 +38,27 @@ const updateIndicator = (previous, current, target) => {
 	}
 }
 
-const updateCurrency = async (base, target) => {
+const updateCurrency = async (base, target, chart = new Chart()) => {
 	const data = await getCurrency(base, target)
-	const dates = [data.date]
-	const weeklyData = {}
-	for (let i = 0; i < 7; i++) {
+	const dates = [data.date], weeklyData = {}
+	for (let i = 0; i < chart.days; i++) {
 		const previousData = await getCurrency(base, target, dates[i])
 		weeklyData[dates[i]] = previousData[target]
-		dates.push(getPreviousDate(dates[i]))
+		if (i < chart.days - 1) dates.push(getPreviousDate(dates[i]))
 	}
 
 	const points = []
 	const prices = Object.values(weeklyData).reverse()
 	const ordered = [...prices].sort((a, b) => a - b)
-	for (let i = 0; i < 7; i++) {
+	for (let i = 0; i < chart.days; i++) {
 		const index = ordered.indexOf(prices[i])
-		const width = (i * 50 - 5) < 0 ? 5 : (i * 50 - 5)
-		const height = 100 - (index * 15 + 5)
+		const width = (i * chart.width - chart.paddingX) < 0 ? chart.paddingX : (i * chart.width - chart.paddingX)
+		const height = chart.vHeight - (index * chart.height + chart.paddingY)
 		points.push(`${width},${height}`)
 	}
 
 	document.querySelector(`#${target}-price`).innerHTML = data[target].toFixed(3)
-	document.querySelector(`#${target}-card`).style.backgroundImage = `url('data:image/svg+xml, <svg xmlns="http://www.w3.org/2000/svg" width="50" height="15" viewBox="0 0 300 100"><polyline fill="none" stroke="%230074d9" stroke-width="10" points="${points.join(" ")}"/></svg>')`
+	document.querySelector(`#${target}-card`).style.backgroundImage = `url('data:image/svg+xml, <svg xmlns="http://www.w3.org/2000/svg" width="${chart.width}" height="${chart.height}" viewBox="0 0 ${chart.vWidth} ${chart.vHeight}"><polyline fill="none" stroke="%23${chart.strokeColor}" stroke-width="${chart.strokeWidth}" points="${points.join(" ")}"/></svg>')`
 	updateIndicator(weeklyData[dates[1]], data[target], target)
 }
 
