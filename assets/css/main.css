@@ -32,12 +32,6 @@ main {
 }
 
 /* Profile */
-#user-info {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
 .avatar {
 	align-self: center;
 	margin-bottom: 1em;
@@ -49,19 +43,26 @@ main {
 	box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
 }
 
-#user-info > a {
+#user-info {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#user-info a {
 	width: 2em;
 	padding: 0.5em;
 	border-radius: 6px;
 	box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
 }
 
-#user-info > a:hover {
+#user-info a:hover {
 	background-color: #55555C;
 }
 
 .icon {
 	width: 2em;
+	height: 2em;
 }
 
 /* Currency */
