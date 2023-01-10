@@ -78,6 +78,16 @@ main {
 	vertical-align: super;
 }
 
+.price-down::before {
+	content: "▼";
+	color: #ff6341;
+}
+
+.price-up::before {
+	content: "▲";
+	color: #3af277;
+}
+
 .currency-name {
 	font-size: 1.7em;
 	padding: 0.3em;

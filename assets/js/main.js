@@ -12,19 +12,17 @@ const getCurrency = async (base, target, date = "latest") => {
 	return fetchData(url)
 }
 
-const getPreviousDate = (date) => {
+const getPreviousDate = (date, days = 1) => {
 	const currentDate = new Date(date)
-	return new Date(currentDate - 864e5).toISOString().substring(0, 10)
+	return new Date(currentDate - 864e5 * days).toISOString().substring(0, 10)
 }
 
 const updateIndicator = (previous, current, target) => {
 	if (previous > current) {
-		document.querySelector(`#${target}-change`).innerHTML = "▼"
-		document.querySelector(`#${target}-change`).style.color = "#ff6341"
+		document.querySelector(`#${target}-change`).classList.add("price-down")
 	}
 	if (previous < current) {
-		document.querySelector(`#${target}-change`).innerHTML = "▲"
-		document.querySelector(`#${target}-change`).style.color = "#3af277"
+		document.querySelector(`#${target}-change`).classList.add("price-up")
 	}
 }
 
