@@ -51,10 +51,36 @@ const updateCurrency = async (base, target) => {
 	updateIndicator(weeklyData[dates[1]], data[target], target)
 }
 
+const getCurrency2 = async (base, target, date = "latest") => {
+	const url = `https://api.frankfurter.app/${date}?from=${base}&to=${target}`
+	return fetchData(url)
+}
+
+const updateCurrency2 = async (base, target) => {
+	const data = await getCurrency2(base, target)
+	const weeklyData = await getCurrency2(base, target, `${getPreviousDate(data.date, 7)}..`)
+	const dates = Object.keys(weeklyData.rates)
+	const prices = Object.values(Object.fromEntries(dates.map(key => [key, weeklyData.rates[key][target.toUpperCase()]])))
+	const points = []
+	const ordered = [...prices].sort((a, b) => a - b)
+	for (let i = 0; i < 7; i++) {
+		const index = ordered.indexOf(prices[i])
+		const width = (i * 50 - 5) < 0 ? 5 : (i * 50 - 5)
+		const height = 100 - (index * 15 + 5)
+		points.push(`${width},${height}`)
+	}
+
+	const yesterday = getPreviousDate(data.date)
+	console.log(weeklyData, yesterday)
+	document.querySelector(`#${target}-price`).innerHTML = data.rates[target.toUpperCase()].toFixed(3)
+	document.querySelector(`#${target}-card`).style.backgroundImage = `url('data:image/svg+xml, <svg xmlns="http://www.w3.org/2000/svg" width="50" height="15" viewBox="0 0 300 100"><polyline fill="none" stroke="%230074d9" stroke-width="10" points="${points.join(" ")}"/></svg>')`
+	updateIndicator(weeklyData.rates[dates[dates.length - 2]][target.toUpperCase()], data.rates[target.toUpperCase()], target)
+}
+
 window.addEventListener("load", () => {
-	updateCurrency("usd", "eur")
-	updateCurrency("usd", "gbp")
-	updateCurrency("usd", "jpy")
-	updateCurrency("usd", "brl")
-	updateCurrency("usd", "cny")
+	updateCurrency2("usd", "eur")
+	updateCurrency2("usd", "gbp")
+	updateCurrency2("usd", "jpy")
+	updateCurrency2("usd", "brl")
+	updateCurrency2("usd", "cny")
 })
