@@ -40,14 +40,14 @@ const updateIndicator = (previous, current, target) => {
 
 const updateCurrency = async (base, target, chart = new Chart()) => {
 	const data = await getCurrency(base, target)
-	const dates = [data.date], weeklyData = {}
+	document.querySelector(`#${target}-price`).innerHTML = data[target].toFixed(3)
+
+	const dates = [data.date], weeklyData = {}, points = []
 	for (let i = 0; i < chart.days; i++) {
 		const previousData = await getCurrency(base, target, dates[i])
 		weeklyData[dates[i]] = previousData[target]
 		if (i < chart.days - 1) dates.push(getPreviousDate(dates[i]))
 	}
-
-	const points = []
 	const prices = Object.values(weeklyData).reverse()
 	const ordered = [...prices].sort((a, b) => a - b)
 	for (let i = 0; i < chart.days; i++) {
@@ -57,7 +57,6 @@ const updateCurrency = async (base, target, chart = new Chart()) => {
 		points.push(`${width},${height}`)
 	}
 
-	document.querySelector(`#${target}-price`).innerHTML = data[target].toFixed(3)
 	document.querySelector(`#${target}-card`).style.backgroundImage = `url('data:image/svg+xml, <svg xmlns="http://www.w3.org/2000/svg" width="${chart.width}" height="${chart.height}" viewBox="0 0 ${chart.vWidth} ${chart.vHeight}"><polyline fill="none" stroke="%23${chart.strokeColor}" stroke-width="${chart.strokeWidth}" points="${points.join(" ")}"/></svg>')`
 	updateIndicator(weeklyData[dates[1]], data[target], target)
 }
