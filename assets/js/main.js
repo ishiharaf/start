@@ -11,7 +11,7 @@ function Chart() {
 }
 
 const fetchData = async (url) => {
-	const response = await fetch(url, {cache: "reload"})
+	const response = await fetch(url)
 	if (response.ok) {
 		return await response.json()
 	} else {
