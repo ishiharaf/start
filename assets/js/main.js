@@ -11,7 +11,7 @@ function Chart() {
 }
 
 const fetchData = async (url) => {
-	const response = await fetch(url)
+	const response = await fetch(url, {cache: "no-cache"})
 	if (response.ok) {
 		return await response.json()
 	} else {
@@ -29,6 +29,16 @@ const getPreviousDate = (date, days = 1) => {
 	return new Date(currentDate - 864e5 * days).toISOString().substring(0, 10)
 }
 
+const getWeeklyData = async (base, target, chart, date) => {
+	const dates = [date], weeklyData = {}
+	for (let i = 0; i < chart.days; i++) {
+		const previousData = await getCurrency(base, target, dates[i])
+		weeklyData[dates[i]] = previousData[target]
+		if (i < chart.days - 1) dates.push(getPreviousDate(dates[i]))
+	}
+	return weeklyData
+}
+
 const updateIndicator = (previous, current, target) => {
 	if (previous > current) {
 		document.querySelector(`#${target}-change`).classList.add("price-down")
@@ -38,17 +48,9 @@ const updateIndicator = (previous, current, target) => {
 	}
 }
 
-const updateCurrency = async (base, target, chart = new Chart()) => {
-	const data = await getCurrency(base, target)
-	document.querySelector(`#${target}-price`).innerHTML = data[target].toFixed(3)
-
-	const dates = [data.date], weeklyData = {}, points = []
-	for (let i = 0; i < chart.days; i++) {
-		const previousData = await getCurrency(base, target, dates[i])
-		weeklyData[dates[i]] = previousData[target]
-		if (i < chart.days - 1) dates.push(getPreviousDate(dates[i]))
-	}
-	const prices = Object.values(weeklyData).reverse()
+const updateChart = (target, data, chart) => {
+	const points = []
+	const prices = Object.values(data).reverse()
 	const ordered = [...prices].sort((a, b) => a - b)
 	for (let i = 0; i < chart.days; i++) {
 		const index = ordered.indexOf(prices[i])
@@ -56,12 +58,24 @@ const updateCurrency = async (base, target, chart = new Chart()) => {
 		const height = chart.vHeight - (index * chart.height + chart.paddingY)
 		points.push(`${width},${height}`)
 	}
-
 	document.querySelector(`#${target}-card`).style.backgroundImage = `url('data:image/svg+xml, <svg xmlns="http://www.w3.org/2000/svg" width="${chart.width}" height="${chart.height}" viewBox="0 0 ${chart.vWidth} ${chart.vHeight}"><polyline fill="none" stroke="%23${chart.strokeColor}" stroke-width="${chart.strokeWidth}" points="${points.join(" ")}"/></svg>')`
-	updateIndicator(weeklyData[dates[1]], data[target], target)
 }
 
-window.addEventListener("load", () => {
+const updateCurrency = async (base, target, chart = new Chart()) => {
+	const data = await getCurrency(base, target)
+	const previousDate = getPreviousDate(data.date)
+	let weeklyData = JSON.parse(localStorage.getItem(target))
+
+	if (!weeklyData || Object.keys(weeklyData)[0] !== data.date) {
+		weeklyData = await getWeeklyData(base, target, chart, data.date)
+		localStorage.setItem(target, JSON.stringify(weeklyData))
+	}
+	document.querySelector(`#${target}-price`).innerHTML = data[target].toFixed(3)
+	updateIndicator(weeklyData[previousDate], data[target], target)
+	updateChart(target, weeklyData, chart)
+}
+
+window.addEventListener("DOMContentLoaded", () => {
 	updateCurrency("usd", "eur")
 	updateCurrency("usd", "gbp")
 	updateCurrency("usd", "jpy")
